@@ -1,4 +1,4 @@
-import { ganttChartInfoType } from '.';
+import { ganttChartInfoType } from ".";
 
 export const npp = (
   arrivalTime: number[],
@@ -7,10 +7,11 @@ export const npp = (
 ) => {
   const processesInfo = arrivalTime
     .map((item, index) => {
-      const job =
-        arrivalTime.length > 26
-          ? `P${index + 1}`
-          : (index + 10).toString(36).toUpperCase();
+      // const job =
+      //   arrivalTime.length > 26
+      //     ? `P${index + 1}`
+      //     : (index + 10).toString(36).toUpperCase();
+      const job = `P${index + 1}`;
 
       return {
         job,

@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { media } from '../GlobalStyle.css';
+import { media } from "../GlobalStyle.css";
 
 const TableWrapper = styled.div`
   overflow: auto;
   max-width: 100%;
   margin: 0px auto 20px auto;
-  ${media['600']`
+  ${media["600"]`
   margin: 0px auto 0px auto;
   `}
   background:
@@ -27,20 +27,20 @@ const StyledTable = styled.table`
   border-collapse: collapse;
   border-radius: 10px;
   box-sizing: border-box;
-  ${media['1275']`font-size: 14px;`}
+  ${media["1275"]`font-size: 14px;`}
 
   tr {
     height: 40px;
     line-height: 0;
-    ${media['600']`height: 35px`};
+    ${media["600"]`height: 35px`};
   }
 
   th,
   td {
     text-align: left;
     padding: 15px;
-    ${media['1275']`padding: 12px`};
-    ${media['600']`padding: 8px`};
+    ${media["1275"]`padding: 12px`};
+    ${media["600"]`padding: 8px`};
     border: 1px solid #e1e1e1;
     line-height: 16.1px;
   }
@@ -48,10 +48,10 @@ const StyledTable = styled.table`
 
 const HeaderCell = styled.th`
   font-size: 1rem;
-  ${media['1275']`font-size: 14px;`}
+  ${media["1275"]`font-size: 14px;`}
   font-weight: 500;
   height: 40px;
-  ${media['600']`height: 35px`};
+  ${media["600"]`height: 35px`};
   white-space: nowrap;
   color: #6d7187;
   background-color: #f9f9fb;
@@ -62,18 +62,23 @@ const precisionRound = (number: number, precision: number) => {
   return Math.round(number * factor) / factor;
 };
 
+// type TableProps = {
+//   solvedProcessesInfo: {
+//     job: string;
+//     at: number;
+//     bt: number;
+//     ft: number;
+//     tat: number;
+//     wat: number;
+//   }[];
+// };
+
 type TableProps = {
-  solvedProcessesInfo: {
-    job: string;
-    at: number;
-    bt: number;
-    ft: number;
-    tat: number;
-    wat: number;
-  }[];
+  solvedProcessesInfo: any[];
+  ganttChartInfo: any[];
 };
 
-const Table = ({ solvedProcessesInfo }: TableProps) => {
+const Table = ({ solvedProcessesInfo, ganttChartInfo }: TableProps) => {
   const total = (array: number[]) =>
     array.reduce((acc, currentValue) => acc + currentValue, 0);
 
@@ -87,8 +92,16 @@ const Table = ({ solvedProcessesInfo }: TableProps) => {
   const totalWAT = total(waitingTime);
   const averageWAT = totalWAT / numberOfProcesses;
 
+  function getStartTime(n: Number) {
+    for (let i = 0; i < ganttChartInfo.length; i++) {
+      if (ganttChartInfo[i].job === "P" + n.toString()) {
+        return Number(ganttChartInfo[i].start);
+      }
+    }
+  }
+
   return (
-    <TableWrapper>    
+    <TableWrapper>
       <StyledTable>
         <thead>
           <tr>
@@ -98,29 +111,36 @@ const Table = ({ solvedProcessesInfo }: TableProps) => {
             <HeaderCell>Finish Time</HeaderCell>
             <HeaderCell>Turnaround Time</HeaderCell>
             <HeaderCell>Waiting Time</HeaderCell>
+            <HeaderCell>Response Time</HeaderCell>
           </tr>
         </thead>
         <tbody>
-          {solvedProcessesInfo.map((item, index) => (
-            <tr key={`process-row-${item.job}`}>
-              <td>{item.job}</td>
-              <td>{item.at}</td>
-              <td>{item.bt}</td>
-              <td>{item.ft}</td>
-              <td>{item.tat}</td>
-              <td>{item.wat}</td>
-            </tr>
-          ))}
+          {solvedProcessesInfo.map((item, index) => {
+            console.log(index + 1, getStartTime(index + 1), Number(item.at));
+            return (
+              <tr key={`process-row-${item.job}`}>
+                <td>{item.job}</td>
+                <td>{item.at}</td>
+                <td>{item.bt}</td>
+                <td>{item.ft}</td>
+                <td>{item.tat}</td>
+                <td>{item.wat}</td>
+                <td>{getStartTime(index + 1) - Number(item.at)}</td>
+              </tr>
+            );
+          })}
           {
             <tr>
-              <td colSpan={4} style={{ textAlign: 'right' }}>
+              <td colSpan={4} style={{ textAlign: "right" }}>
                 Average
               </td>
               <td>
-                {totalTAT} / {numberOfProcesses} = {precisionRound(averageTAT, 3)}
+                {totalTAT} / {numberOfProcesses} ={" "}
+                {precisionRound(averageTAT, 3)}
               </td>
               <td>
-                {totalWAT} / {numberOfProcesses} = {precisionRound(averageWAT, 3)}
+                {totalWAT} / {numberOfProcesses} ={" "}
+                {precisionRound(averageWAT, 3)}
               </td>
             </tr>
           }

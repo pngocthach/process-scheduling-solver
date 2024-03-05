@@ -1,14 +1,14 @@
-import styled, { keyframes } from 'styled-components';
-import GanttChart from './GanttChart';
-import Table from './Table';
-import { solve } from '../../algorithms';
-import { OptionType } from '../Input/AlgoSelect';
+import styled, { keyframes } from "styled-components";
+import GanttChart from "./GanttChart";
+import Table from "./Table";
+import { solve } from "../../algorithms";
+import { OptionType } from "../Input/AlgoSelect";
 
-import { media } from '../GlobalStyle.css';
+import { media } from "../GlobalStyle.css";
 
 const StyledOutput = styled.div`
   padding: 1rem 2rem 2rem 2rem;
-  ${media['600']`padding: 0.5rem 1.1rem 1.5rem 1.1rem;`}
+  ${media["600"]`padding: 0.5rem 1.1rem 1.5rem 1.1rem;`}
   background: #ffffff;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1),
     0px 2px 32px rgba(15, 91, 206, 0.1);
@@ -17,7 +17,7 @@ const StyledOutput = styled.div`
   min-width: 0;
   overflow: hidden;
   align-self: baseline;
-  ${media['1050']`align-self: normal;`}
+  ${media["1050"]`align-self: normal;`}
 `;
 
 const Header = styled.div`
@@ -29,7 +29,7 @@ const Header = styled.div`
 const Text = styled.p`
   margin: 0;
   padding: 0;
-  ${media['600']`
+  ${media["600"]`
     font-size: 14px;
   `}
 `;
@@ -39,7 +39,7 @@ const AlgoValue = styled.span`
   font-weight: 500;
   border-radius: 5px;
   padding: 8px 10px;
-  ${media['600']`
+  ${media["600"]`
     font-size: 14px;
   `}
 `;
@@ -59,8 +59,8 @@ const FadeIn = ({ duration = 600, delay = 0, children, ...delegated }) => {
       {...delegated}
       style={{
         ...(delegated.style || {}),
-        animationDuration: duration + 'ms',
-        animationDelay: delay + 'ms',
+        animationDuration: duration + "ms",
+        animationDelay: delay + "ms",
       }}
     >
       {children}
@@ -107,6 +107,9 @@ const Output = ({
       timeQuantum,
       priorities
     );
+
+    console.log(ganttChartInfo);
+
     return (
       <StyledOutput>
         <Header>
@@ -118,7 +121,10 @@ const Output = ({
         {
           <FadeIn>
             <GanttChart {...{ ganttChartInfo }} />
-            <Table {...{ solvedProcessesInfo }} />
+            <Table
+              solvedProcessesInfo={solvedProcessesInfo}
+              ganttChartInfo={ganttChartInfo}
+            />
           </FadeIn>
         }
       </StyledOutput>
