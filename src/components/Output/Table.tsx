@@ -92,9 +92,12 @@ const Table = ({ solvedProcessesInfo, ganttChartInfo }: TableProps) => {
   const totalWAT = total(waitingTime);
   const averageWAT = totalWAT / numberOfProcesses;
 
-  function getStartTime(n: Number) {
+  console.log(ganttChartInfo);
+
+  function getStartTime(job: string) {
     for (let i = 0; i < ganttChartInfo.length; i++) {
-      if (ganttChartInfo[i].job === "P" + n.toString()) {
+      if (ganttChartInfo[i].job === job) {
+        console.log(`P[${i}]: ${ganttChartInfo[i].start}`);
         return Number(ganttChartInfo[i].start);
       }
     }
@@ -116,7 +119,7 @@ const Table = ({ solvedProcessesInfo, ganttChartInfo }: TableProps) => {
         </thead>
         <tbody>
           {solvedProcessesInfo.map((item, index) => {
-            console.log(index + 1, getStartTime(index + 1), Number(item.at));
+            // console.log(index + 1, getStartTime(index + 1), Number(item.at));
             return (
               <tr key={`process-row-${item.job}`}>
                 <td>{item.job}</td>
@@ -125,7 +128,7 @@ const Table = ({ solvedProcessesInfo, ganttChartInfo }: TableProps) => {
                 <td>{item.ft}</td>
                 <td>{item.tat}</td>
                 <td>{item.wat}</td>
-                <td>{getStartTime(index + 1) - Number(item.at)}</td>
+                <td>{getStartTime(item.job) - Number(item.at)}</td>
               </tr>
             );
           })}
